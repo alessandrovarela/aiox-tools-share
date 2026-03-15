@@ -15,11 +15,21 @@ O script faz automaticamente:
 
 ## Como usar
 
-### 1. Baixe o script
+### 1. Backup completo do projeto
+
+Antes de qualquer coisa, faça uma cópia completa da pasta do seu projeto:
+
+```bash
+cp -r /caminho/do/seu/projeto /caminho/do/seu/projeto-backup
+```
+
+Assim, se algo der errado em qualquer etapa, você tem como voltar ao estado original.
+
+### 2. Baixe o script
 
 Baixe o arquivo [`migrate-aios-to-aiox.js`](./migrate-aios-to-aiox.js) e copie para dentro da **raiz do projeto** que será migrado.
 
-### 2. Preview (simulação)
+### 3. Preview (simulação)
 
 Antes de migrar, rode o script em modo `--dry-run` para ver o que será feito **sem alterar nada**:
 
@@ -36,7 +46,7 @@ Ele vai listar:
 
 Revise a saída e confirme que está tudo certo antes de prosseguir.
 
-### 3. Migração real
+### 4. Migração real
 
 Quando estiver pronto, rode sem a flag `--dry-run`:
 
@@ -52,7 +62,7 @@ Se o script detectar que você alterou arquivos dentro do `.aios-core/`, ele vai
 | **2** | Migra apenas o framework (descarta suas alterações) |
 | **3** | Cancela a migração |
 
-### 4. Instalar o AIOX
+### 5. Instalar o AIOX
 
 ```bash
 npx aiox-core@latest install
@@ -71,7 +81,7 @@ Na detecção de arquivos existentes:
 | `rules.md` | **merge** |
 | `.env` | **skip** |
 
-### 5. Após a instalação
+### 6. Após a instalação
 
 Execute o diagnóstico para verificar que tudo está correto:
 
@@ -79,7 +89,7 @@ Execute o diagnóstico para verificar que tudo está correto:
 npx aiox-core doctor
 ```
 
-### 6. Commit da migração
+### 7. Commit da migração
 
 Entre no Claude Code e peça ao devops para fazer o commit:
 
@@ -88,7 +98,7 @@ claude
 > @devops faça o commit da migração AIOS para AIOX
 ```
 
-### 7. Limpeza
+### 8. Limpeza
 
 Quando estiver satisfeito com a migração, apague o backup:
 
