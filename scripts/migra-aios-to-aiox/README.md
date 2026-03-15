@@ -73,10 +73,10 @@ Na detecção de arquivos existentes:
 | `CLAUDE.md` | **merge** | **Claude Code** |
 | `agents.md` | **merge** | **Codex** |
 | `rules.md` | **merge** | **Gemini** |
-| `.env` | **skip** | **skip** |
+| `.env` | **skip** | **-** |
 
 ### Importante
-A opção de escolher "merge" é para garantir que você não perca as alterações que você fez nos arquivos. Mas isso pode duplicar algumas regras. Isso será ajustado no passo 7
+A opção de escolher "merge" é para garantir que você não perca as alterações que você fez nos arquivos. Mas isso pode duplicar algumas regras. Isso será ajustado no passo 7.
 
 ### 6. Após a instalação
 
