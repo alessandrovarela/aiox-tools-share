@@ -68,12 +68,15 @@ Na instalação, escolha:
 
 Na detecção de arquivos existentes:
 
-| Arquivo | Ação |
-|---------|------|
-| `CLAUDE.md` | **merge** |
-| `agents.md` | **merge** |
-| `rules.md` | **merge** |
-| `.env` | **skip** |
+| Arquivo | Ação | IDE |
+|---------|------|------|
+| `CLAUDE.md` | **merge** | **Claude Code** |
+| `agents.md` | **merge** | **Codex** |
+| `rules.md` | **merge** | **Gemini** |
+| `.env` | **skip** | **skip** |
+
+### Importante
+A opção de escolher "merge" é para garantir que você não perca as alterações que você fez nos arquivos. Mas isso pode duplicar algumas regras. Isso será ajustado no passo 7
 
 ### 6. Após a instalação
 
@@ -83,16 +86,27 @@ Execute o diagnóstico para verificar que tudo está correto:
 npx aiox-core doctor
 ```
 
-### 7. Commit da migração
+### 7. Revisar arquivos mesclados
 
-Entre no Claude Code e peça ao devops para fazer o commit:
+Entre no Claude Code e peça ao devops revisar os arquivos mesclados:
+
+Exemplo se você mesclou o arquivo .claude/CLAUDE.md:
+
+```bash
+claude
+> @devops revise o arquivo .claude/CLAUDE.md mesclado na migração para o AIOX. Verifique se há duplicação e ajuste. As regras antigas gerenciadas pelo AIOS podem ser excluidas.
+```
+
+### 8. Commit da migração
+
+Peça ao devops para fazer o commit:
 
 ```bash
 claude
 > @devops faça o commit da migração AIOS para AIOX
 ```
 
-### 8. Limpeza
+### 9. Limpeza
 
 Quando estiver satisfeito com a migração, apague o backup que foi feito da antiga pasta `.aios-core/`:
 
