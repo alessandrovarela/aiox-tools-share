@@ -11,7 +11,7 @@ O script faz automaticamente:
 
 ## Pré-requisitos
 
-- [Node.js](https://nodejs.org) instalado (v14+) — se você já usa AIOS/AIOX, já tem instalado
+- [Node.js](https://nodejs.org) instalado (v14+) — se você já usa AIOS/AIOX, já tem instalado 😉
 
 ## Como usar
 
