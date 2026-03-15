@@ -306,18 +306,28 @@ async function main() {
   if (!detection) {
     console.log('');
     err('Nao foi possivel verificar se voce modificou arquivos do core.');
-    err('A migracao precisa de pelo menos um destes metodos para funcionar:');
     console.log('');
-    console.log(`  1. ${c.bold('install-manifest.yaml')} com hashes (gerado pelo instalador)`);
-    console.log(`     Caminho esperado: ${c.cyan(OLD_DIR + '/install-manifest.yaml')}`);
+    err('Este script precisa saber se voce alterou arquivos dentro de');
+    err(`${OLD_DIR}/ para nao perder suas modificacoes durante a migracao.`);
     console.log('');
-    console.log(`  2. ${c.bold('Git')} (o projeto precisa estar num repositorio git)`);
-    console.log(`     Execute: ${c.cyan('git init && git add -A && git commit -m "antes da migracao"')}`);
+    err('Para isso, o projeto precisa de pelo menos um destes:');
+    console.log(`  1. ${c.bold('install-manifest.yaml')} com hashes (gerado automaticamente pelo instalador)`);
+    console.log(`  2. ${c.bold('Repositorio git')} com os arquivos do core commitados ${c.red('ANTES')} de qualquer alteracao`);
     console.log('');
-    err('Sem essa verificacao, a migracao pode sobrescrever alteracoes');
-    err('que voce tenha feito nos arquivos do core sem aviso.');
+    warn('Se voce nunca alterou nenhum arquivo dentro de ' + OLD_DIR + '/, pode');
+    warn('prosseguir com seguranca. Nesse caso, inicialize o git e rode novamente:');
     console.log('');
-    info('Solucao recomendada: inicialize um repositorio git antes de migrar.');
+    console.log(`  ${c.cyan('git init && git add -A && git commit -m "antes da migracao"')}`);
+    console.log(`  ${c.cyan('node migrate-aios-to-aiox.js')}`);
+    console.log('');
+    warn('Porem, se voce JA MODIFICOU arquivos do core e inicializar o git agora,');
+    warn('o script NAO vai detectar essas alteracoes (o git vai considerar o estado');
+    warn('atual como original). Nesse caso, faca um backup manual antes de migrar:');
+    console.log('');
+    console.log(`  ${c.cyan('cp -r ' + OLD_DIR + ' ' + OLD_DIR + '-meu-backup')}`);
+    console.log(`  ${c.cyan('git init && git add -A && git commit -m "antes da migracao"')}`);
+    console.log(`  ${c.cyan('node migrate-aios-to-aiox.js')}`);
+    console.log('');
     process.exit(1);
   }
 
