@@ -17,7 +17,7 @@ O script faz automaticamente:
 
 ### 1. Backup completo do projeto
 
-Antes de qualquer coisa, faça uma cópia completa da pasta do seu projeto.
+Antes de qualquer coisa, faça um backup completo da pasta do seu projeto.
 
 ### 2. Baixe o script
 
