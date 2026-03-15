@@ -122,7 +122,10 @@ function ask(question) {
 
 /**
  * Estrategia 1: Usa install-manifest.yaml (funciona sem git)
- * Compara hash SHA256 atual vs hash original da instalacao
+ * Suporta dois formatos de manifest:
+ *   - Com hash:  path: "caminho"  hash: "sha256:xxx"
+ *   - Sem hash (lista simples):  files:\n  - caminho/arquivo.js
+ * Quando nao ha hash, so consegue detectar arquivos novos (nao modificados)
  */
 function getManifestModifiedFiles() {
   const manifestPath = path.join(PROJECT_DIR, OLD_DIR, 'install-manifest.yaml');
@@ -133,41 +136,50 @@ function getManifestModifiedFiles() {
 
   try {
     const content = fs.readFileSync(manifestPath, 'utf8');
-
-    // Parse simples do YAML (sem dependencia externa)
-    // Formato: path: "caminho"  hash: "sha256:xxx"
-    const fileEntries = [];
     const lines = content.split('\n');
-    let currentEntry = {};
 
-    for (const line of lines) {
-      const pathMatch = line.match(/^\s+path:\s*"?([^"]+)"?\s*$/);
-      const hashMatch = line.match(/^\s+hash:\s*"?(sha256:[a-f0-9]+)"?\s*$/);
+    // Detectar formato: se tem linhas "  - caminho" eh lista simples
+    const isSimpleList = lines.some((l) => /^\s+-\s+\S/.test(l));
 
-      if (pathMatch) {
-        currentEntry.path = pathMatch[1];
-      }
-      if (hashMatch) {
-        currentEntry.hash = hashMatch[1];
-      }
-
-      if (currentEntry.path && currentEntry.hash) {
-        fileEntries.push({ ...currentEntry });
-        currentEntry = {};
-      }
-    }
-
-    // Comparar cada arquivo do manifest
     const manifestPaths = new Set();
-    for (const entry of fileEntries) {
-      const fullPath = path.join(PROJECT_DIR, entry.path);
-      manifestPaths.add(entry.path);
 
-      if (!fs.existsSync(fullPath)) continue; // arquivo removido, ignorar
+    if (isSimpleList) {
+      // Formato lista simples nao tem caminhos completos nem hashes,
+      // entao nao eh confiavel para detectar modificacoes/novos.
+      // Cair no fallback do git.
+      return null;
+    } else {
+      // Formato com hash: path: "caminho"  hash: "sha256:xxx"
+      const fileEntries = [];
+      let currentEntry = {};
 
-      const currentHash = sha256(fullPath);
-      if (currentHash && currentHash !== entry.hash) {
-        modified.push(entry.path);
+      for (const line of lines) {
+        const pathMatch = line.match(/^\s+path:\s*"?([^"]+)"?\s*$/);
+        const hashMatch = line.match(/^\s+hash:\s*"?(sha256:[a-f0-9]+)"?\s*$/);
+
+        if (pathMatch) {
+          currentEntry.path = pathMatch[1];
+        }
+        if (hashMatch) {
+          currentEntry.hash = hashMatch[1];
+        }
+
+        if (currentEntry.path && currentEntry.hash) {
+          fileEntries.push({ ...currentEntry });
+          currentEntry = {};
+        }
+      }
+
+      for (const entry of fileEntries) {
+        const fullPath = path.join(PROJECT_DIR, entry.path);
+        manifestPaths.add(entry.path);
+
+        if (!fs.existsSync(fullPath)) continue;
+
+        const currentHash = sha256(fullPath);
+        if (currentHash && currentHash !== entry.hash) {
+          modified.push(entry.path);
+        }
       }
     }
 
