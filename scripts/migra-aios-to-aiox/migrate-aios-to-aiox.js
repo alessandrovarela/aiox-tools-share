@@ -287,6 +287,7 @@ async function main() {
   info(`Metodo de deteccao: ${source}`);
 
   const hasChanges = modified.length > 0 || newFiles.length > 0;
+  let discardUserChanges = false;
 
   if (hasChanges) {
     console.log('');
@@ -326,7 +327,8 @@ async function main() {
     if (!DRY_RUN) {
       console.log('  Opcoes:');
       console.log(`  ${c.green('[1]')} Migrar TUDO (incluindo suas alteracoes e arquivos novos)`);
-      console.log(`  ${c.yellow('[2]')} Migrar apenas o framework (descartar suas alteracoes)`);
+      console.log(`  ${c.red('[2]')} Migrar apenas o framework ${c.red('(PERDA DE DADOS: suas alteracoes e arquivos')}`);
+      console.log(`       ${c.red('novos serao REMOVIDOS da pasta migrada. Ficam apenas no backup)')}`);
       console.log(`  ${c.red('[3]')} Cancelar`);
       console.log('');
       const choice = await ask(c.cyan('Escolha uma opcao (1/2/3): '));
@@ -337,9 +339,13 @@ async function main() {
       }
 
       if (choice === '2') {
-        info('Migrando apenas o framework. Suas alteracoes ficam no backup.');
-        // Marcar para nao copiar alteracoes do usuario
-        // O backup ja contem tudo — basta nao re-aplicar
+        const confirm = await ask(c.red('Tem certeza? Seus arquivos modificados/novos serao removidos de ' + NEW_DIR + '/ (s/N): '));
+        if (confirm !== 's' && confirm !== 'sim') {
+          info('Migracao cancelada.');
+          process.exit(0);
+        }
+        discardUserChanges = true;
+        info('Migrando apenas o framework. Suas alteracoes ficam somente no backup.');
       }
 
       if (choice === '1') {
@@ -415,7 +421,30 @@ async function main() {
   fs.renameSync(oldPath, newPath);
   info('Pasta renomeada');
 
-  // Passo 3: Atualizar conteudo dos arquivos
+  // Passo 3: Descartar alteracoes do usuario (se opcao 2)
+  if (discardUserChanges) {
+    log('Removendo alteracoes do usuario da pasta migrada...');
+
+    for (const f of modified) {
+      const migratedPath = path.join(PROJECT_DIR, f.replace(OLD_DIR, NEW_DIR));
+      try {
+        fs.unlinkSync(migratedPath);
+        console.log(`  ✗ ${c.yellow('removido: ' + path.relative(PROJECT_DIR, migratedPath))}`);
+      } catch { /* arquivo ja nao existe */ }
+    }
+
+    for (const f of newFiles) {
+      const migratedPath = path.join(PROJECT_DIR, f.replace(OLD_DIR, NEW_DIR));
+      try {
+        fs.unlinkSync(migratedPath);
+        console.log(`  ✗ ${c.yellow('removido: ' + path.relative(PROJECT_DIR, migratedPath))}`);
+      } catch { /* arquivo ja nao existe */ }
+    }
+
+    info('Alteracoes do usuario removidas. Use "npx aiox-core@latest install" para reinstalar os arquivos originais.');
+  }
+
+  // Passo 5: Atualizar conteudo dos arquivos
   log('Atualizando referencias nos arquivos...');
   let updatedCount = 0;
 
@@ -431,7 +460,7 @@ async function main() {
     } catch { /* skip */ }
   }
 
-  // Passo 4: Atualizar .gitignore
+  // Passo 6: Atualizar .gitignore
   const gitignorePath = path.join(PROJECT_DIR, '.gitignore');
   if (fs.existsSync(gitignorePath)) {
     log('Atualizando .gitignore...');
@@ -439,7 +468,7 @@ async function main() {
     info('.gitignore atualizado');
   }
 
-  // Passo 5: Atualizar package.json
+  // Passo 7: Atualizar package.json
   const pkgPath = path.join(PROJECT_DIR, 'package.json');
   if (fs.existsSync(pkgPath)) {
     log('Atualizando package.json...');
@@ -447,7 +476,7 @@ async function main() {
     info('package.json atualizado');
   }
 
-  // Passo 6: Verificacao
+  // Passo 8: Verificacao
   log('Verificando migracao...');
   const remaining = [];
   walkDirFiltered(PROJECT_DIR, (filePath) => {
