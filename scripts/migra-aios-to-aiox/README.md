@@ -17,13 +17,7 @@ O script faz automaticamente:
 
 ### 1. Backup completo do projeto
 
-Antes de qualquer coisa, faça uma cópia completa da pasta do seu projeto:
-
-```bash
-cp -r /caminho/do/seu/projeto /caminho/do/seu/projeto-backup
-```
-
-Assim, se algo der errado em qualquer etapa, você tem como voltar ao estado original.
+Antes de qualquer coisa, faça uma cópia completa da pasta do seu projeto.
 
 ### 2. Baixe o script
 
