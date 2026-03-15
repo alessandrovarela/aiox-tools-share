@@ -52,13 +52,34 @@ Se o script detectar que você alterou arquivos dentro do `.aios-core/`, ele vai
 | **2** | Migra apenas o framework (descarta suas alterações) |
 | **3** | Cancela a migração |
 
-### 4. Após a migração
-
-Instale a versão mais recente do AIOX:
+### 4. Instalar o AIOX
 
 ```bash
 npx aiox-core@latest install
 ```
+
+Na instalação, escolha:
+
+- Tipo de projeto: **Brownfield**
+
+Na detecção de arquivos existentes:
+
+| Arquivo | Ação |
+|---------|------|
+| `CLAUDE.md` | **merge** |
+| `agents.md` | **merge** |
+| `rules.md` | **merge** |
+| `.env` | **skip** |
+
+### 5. Após a instalação
+
+Execute o diagnóstico para verificar que tudo está correto:
+
+```bash
+npx aiox-core doctor
+```
+
+### 6. Limpeza
 
 Quando estiver satisfeito com a migração, apague o backup:
 

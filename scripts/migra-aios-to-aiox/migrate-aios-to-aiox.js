@@ -560,9 +560,22 @@ async function main() {
   }
 
   console.log('');
-  console.log(c.boldCyan('  Proximo passo:'));
-  console.log(`  ${c.bold('npx aiox-core@latest install')}`);
-  console.log(`  ${c.cyan('(sincroniza com a versao mais recente do AIOX)')}`);
+  console.log(c.boldCyan('  Proximos passos:'));
+  console.log('');
+  console.log(`  ${c.bold('1.')} Instale o AIOX:`);
+  console.log(`     ${c.bold('npx aiox-core@latest install')}`);
+  console.log('');
+  console.log(`  ${c.bold('2.')} Na instalacao, escolha:`);
+  console.log(`     Tipo de projeto: ${c.boldGreen('Brownfield')}`);
+  console.log('');
+  console.log(`  ${c.bold('3.')} Na deteccao de arquivos existentes:`);
+  console.log(`     ${c.cyan('CLAUDE.md')}  → ${c.boldGreen('merge')}`);
+  console.log(`     ${c.cyan('agents.md')} → ${c.boldGreen('merge')}`);
+  console.log(`     ${c.cyan('rules.md')}  → ${c.boldGreen('merge')}`);
+  console.log(`     ${c.cyan('.env')}      → ${c.boldYellow('skip')}`);
+  console.log('');
+  console.log(`  ${c.bold('4.')} Apos a instalacao, execute:`);
+  console.log(`     ${c.bold('npx aiox-core doctor')}`);
   console.log('');
 }
 
