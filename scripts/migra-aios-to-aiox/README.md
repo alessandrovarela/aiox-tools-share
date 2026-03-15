@@ -62,8 +62,14 @@ npx aiox-core@latest install
 
 Quando estiver satisfeito com a migração, apague o backup:
 
+**Mac / Linux:**
 ```bash
 rm -rf .aios-backup-*
+```
+
+**Windows (CMD):**
+```cmd
+for /d %d in (.aios-backup-*) do rmdir /s /q "%d"
 ```
 
 ## Backup
