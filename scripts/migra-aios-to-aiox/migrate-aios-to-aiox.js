@@ -199,12 +199,13 @@ function getManifestModifiedFiles() {
 
 /**
  * Estrategia 2: Usa git (fallback)
+ * Retorna null se o projeto nao estiver num repositorio git
  */
 function getGitModifiedFiles() {
   try {
     execSync('git rev-parse --is-inside-work-tree', { stdio: 'ignore' });
   } catch {
-    return { modified: [], newFiles: [] };
+    return null; // nao eh repositorio git
   }
 
   const modified = [];
@@ -225,6 +226,7 @@ function getGitModifiedFiles() {
 
 /**
  * Detecta arquivos modificados usando manifest (preferencial) ou git (fallback)
+ * Retorna null se nenhum metodo estiver disponivel
  */
 function detectModifiedFiles() {
   // Tentar manifest primeiro (funciona sem git)
@@ -235,7 +237,11 @@ function detectModifiedFiles() {
 
   // Fallback para git
   const gitResult = getGitModifiedFiles();
-  return { ...gitResult, source: 'git' };
+  if (gitResult) {
+    return { ...gitResult, source: 'git' };
+  }
+
+  return null;
 }
 
 // ── Funcoes de migracao ─────────────────────────────────────────────
@@ -295,7 +301,27 @@ async function main() {
 
   // Detectar arquivos modificados
   log('Verificando arquivos modificados pelo usuario...');
-  const { modified, newFiles, source } = detectModifiedFiles();
+  const detection = detectModifiedFiles();
+
+  if (!detection) {
+    console.log('');
+    err('Nao foi possivel verificar se voce modificou arquivos do core.');
+    err('A migracao precisa de pelo menos um destes metodos para funcionar:');
+    console.log('');
+    console.log(`  1. ${c.bold('install-manifest.yaml')} com hashes (gerado pelo instalador)`);
+    console.log(`     Caminho esperado: ${c.cyan(OLD_DIR + '/install-manifest.yaml')}`);
+    console.log('');
+    console.log(`  2. ${c.bold('Git')} (o projeto precisa estar num repositorio git)`);
+    console.log(`     Execute: ${c.cyan('git init && git add -A && git commit -m "antes da migracao"')}`);
+    console.log('');
+    err('Sem essa verificacao, a migracao pode sobrescrever alteracoes');
+    err('que voce tenha feito nos arquivos do core sem aviso.');
+    console.log('');
+    info('Solucao recomendada: inicialize um repositorio git antes de migrar.');
+    process.exit(1);
+  }
+
+  const { modified, newFiles, source } = detection;
   info(`Metodo de deteccao: ${source}`);
 
   const hasChanges = modified.length > 0 || newFiles.length > 0;
