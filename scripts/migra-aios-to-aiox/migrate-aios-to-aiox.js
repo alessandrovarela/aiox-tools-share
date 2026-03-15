@@ -305,28 +305,10 @@ async function main() {
 
   if (!detection) {
     console.log('');
-    err('Nao foi possivel verificar se voce modificou arquivos do core.');
-    console.log('');
-    err('Este script precisa saber se voce alterou arquivos dentro de');
-    err(`${OLD_DIR}/ para nao perder suas modificacoes durante a migracao.`);
-    console.log('');
-    err('Para isso, o projeto precisa de pelo menos um destes:');
-    console.log(`  1. ${c.bold('install-manifest.yaml')} com hashes (gerado automaticamente pelo instalador)`);
-    console.log(`  2. ${c.bold('Repositorio git')} com os arquivos do core commitados ${c.red('ANTES')} de qualquer alteracao`);
-    console.log('');
-    warn('Se voce nunca alterou nenhum arquivo dentro de ' + OLD_DIR + '/, pode');
-    warn('prosseguir com seguranca. Nesse caso, inicialize o git e rode novamente:');
-    console.log('');
-    console.log(`  ${c.cyan('git init && git add -A && git commit -m "antes da migracao"')}`);
-    console.log(`  ${c.cyan('node migrate-aios-to-aiox.js')}`);
-    console.log('');
-    warn('Porem, se voce JA MODIFICOU arquivos do core e inicializar o git agora,');
-    warn('o script NAO vai detectar essas alteracoes (o git vai considerar o estado');
-    warn('atual como original). Nesse caso, faca um backup manual antes de migrar:');
-    console.log('');
-    console.log(`  ${c.cyan('cp -r ' + OLD_DIR + ' ' + OLD_DIR + '-meu-backup')}`);
-    console.log(`  ${c.cyan('git init && git add -A && git commit -m "antes da migracao"')}`);
-    console.log(`  ${c.cyan('node migrate-aios-to-aiox.js')}`);
+    err('Migracao abortada.');
+    err('Nao ha repositorio git nem manifesto confiavel para verificar');
+    err('se voce modificou arquivos do core. Sem essas referencias,');
+    err('a migracao nao pode ser realizada com seguranca.');
     console.log('');
     process.exit(1);
   }
