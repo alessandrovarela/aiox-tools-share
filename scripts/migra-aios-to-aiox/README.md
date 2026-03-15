@@ -17,7 +17,7 @@ O script faz automaticamente:
 
 ### 1. Baixe o script
 
-Baixe o arquivo [`migrate-aios-to-aiox.js`](./migrate-aios-to-aiox.js) e copie para dentro da **raiz do projeto** que será migrado.
+Baixe o arquivo [`migrate-aios-to-aiox.js`](https://raw.githubusercontent.com/alessandrovarela/aiox-tools-share/main/scripts/migra-aios-to-aiox/migrate-aios-to-aiox.js) e copie para dentro da **raiz do projeto** que será migrado.
 
 ### 2. Preview (simulação)
 
