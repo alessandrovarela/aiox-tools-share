@@ -94,7 +94,7 @@ claude
 
 ### 8. Limpeza
 
-Quando estiver satisfeito com a migração, apague o backup:
+Quando estiver satisfeito com a migração, apague o backup que foi feito da antiga pasta `.aios-core/`:
 
 **Mac / Linux:**
 ```bash
@@ -105,13 +105,3 @@ rm -rf .aios-backup-*
 ```cmd
 for /d %d in (.aios-backup-*) do rmdir /s /q "%d"
 ```
-
-## Backup
-
-O script **sempre** cria um backup automático antes de alterar qualquer coisa. A pasta de backup segue o formato:
-
-```
-.aios-backup-2026-03-15T10-30-00/
-```
-
-Se algo der errado, seus arquivos originais estarão lá.
