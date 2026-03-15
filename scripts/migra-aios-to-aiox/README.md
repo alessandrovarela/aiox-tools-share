@@ -79,7 +79,16 @@ Execute o diagnóstico para verificar que tudo está correto:
 npx aiox-core doctor
 ```
 
-### 6. Limpeza
+### 6. Commit da migração
+
+Entre no Claude Code e peça ao devops para fazer o commit:
+
+```bash
+claude
+> @devops faça o commit da migração AIOS para AIOX
+```
+
+### 7. Limpeza
 
 Quando estiver satisfeito com a migração, apague o backup:
 

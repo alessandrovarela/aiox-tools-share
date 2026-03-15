@@ -577,6 +577,10 @@ async function main() {
   console.log(`  ${c.bold('4.')} Apos a instalacao, execute:`);
   console.log(`     ${c.bold('npx aiox-core doctor')}`);
   console.log('');
+  console.log(`  ${c.bold('5.')} Entre no Claude Code e peca ao devops para fazer o commit:`);
+  console.log(`     ${c.bold('claude')}`);
+  console.log(`     ${c.cyan('> @devops faca o commit da migracao AIOS para AIOX')}`);
+  console.log('');
 }
 
 main().catch((error) => {
