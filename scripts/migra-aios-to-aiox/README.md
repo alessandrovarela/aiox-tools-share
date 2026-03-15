@@ -23,9 +23,9 @@ Antes de qualquer coisa, faça um backup completo da pasta do seu projeto.
 
 Baixe o arquivo [`migrate-aios-to-aiox.js`](./migrate-aios-to-aiox.js) e copie para dentro da **raiz do projeto** que será migrado.
 
-### 3. Preview (simulação)
+### 3. Preview (simulação opcional)
 
-Antes de migrar, rode o script em modo `--dry-run` para ver o que será feito **sem alterar nada**:
+Antes de migrar, você pode rodar o script em modo `--dry-run` para ver o que será feito **sem alterar nada**:
 
 ```bash
 cd /caminho/do/seu/projeto
